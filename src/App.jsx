@@ -273,136 +273,99 @@ function App() {
           )}
         </TableBody>
       </Table>
-      {openModal && (
-        <div
-          style={{
-            position: "fixed",
-            top: "0",
-            left: 0,
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 100,
+{openModal && (
+  <div className="add">
+    <div style={{ backgroundColor: "white", padding: "20px", borderRadius: "5px" }}>
+      <h2>Add New User</h2>
+      <TextField
+        label="Name"
+        variant="outlined"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        sx={{ width: "100%", marginBottom: "10px" }}
+      />
+      <TextField
+        label="Gender"
+        variant="outlined"
+        value={gender}
+        onChange={(e) => setGender(e.target.value)}
+        sx={{ width: "100%", marginBottom: "10px" }}
+      />
+      <TextField
+        label="Age"
+        variant="outlined"
+        value={age}
+        onChange={(e) => setAge(e.target.value)}
+        sx={{ width: "100%", marginBottom: "10px" }}
+      />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "20px",
+        }}
+      >
+        <Button
+          onClick={AddData}
+          sx={{
+            backgroundColor: "green",
+            color: "white",
+            fontSize: "13px",
+            width: "100px",
+            height: "40px",
+            borderRadius: "5px",
           }}
         >
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "25%",
-            }}
-          >
-            <h2>Add New User</h2>
-            <TextField
-              label="Name"
-              variant="outlined"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              sx={{ width: "100%", marginBottom: "10px" }}
-            />
-            <TextField
-              label="Gender"
-              variant="outlined"
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-              sx={{ width: "100%", marginBottom: "10px" }}
-            />
-            <TextField
-              label="Age"
-              variant="outlined"
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
-              sx={{ width: "100%", marginBottom: "10px" }}
-            />
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "20px",
-              }}
-            >
-              <Button
-                onClick={AddData}
-                sx={{
-                  backgroundColor: "green",
-                  color: "white",
-                  fontSize: "13px",
-                  width: "100px",
-                  height: "40px",
-                  borderRadius: "5px",
-                }}
-              >
-                Add
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+          Add
+        </Button>
+      </div>
+    </div>
+  </div>
+)}
 
-      {editopen && (
-        <div
-          style={{
-            position: "fixed",
-            top: "0",
-            left: 0,
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 100,
+{editopen && (
+  <div className="edit">
+    <div style={{ backgroundColor: "white", padding: "20px", borderRadius: "5px" }}>
+      <h2>Edit User</h2>
+      <TextField
+        label="Name"
+        variant="outlined"
+        value={editName}
+        onChange={(e) => setEditName(e.target.value)}
+        sx={{ width: "100%", marginBottom: "10px" }}
+      />
+      <TextField
+        label="Gender"
+        variant="outlined"
+        value={editGender}
+        onChange={(e) => setEditGender(e.target.value)}
+        sx={{ width: "100%", marginBottom: "10px" }}
+      />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "20px",
+        }}
+      >
+        <Button
+          onClick={EditData}
+          sx={{
+            backgroundColor: "green",
+            color: "white",
+            fontSize: "13px",
+            width: "100px",
+            height: "40px",
+            borderRadius: "5px",
           }}
         >
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "25%",
-            }}
-          >
-            <h2>Edit User</h2>
-            <TextField
-              label="Name"
-              variant="outlined"
-              value={editName}
-              onChange={(e) => setEditName(e.target.value)}
-              sx={{ width: "100%", marginBottom: "10px" }}
-            />
-            <TextField
-              label="Gender"
-              variant="outlined"
-              value={editGender}
-              onChange={(e) => setEditGender(e.target.value)}
-              sx={{ width: "100%", marginBottom: "10px" }}
-            />
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "20px",
-              }}
-            >
-              <Button
-                onClick={EditData}
-                sx={{
-                  backgroundColor: "green",
-                  color: "white",
-                  fontSize: "13px",
-                  width: "100px",
-                  height: "40px",
-                  borderRadius: "5px",
-                }}
-              >
-                Save
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+          Save
+        </Button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }
