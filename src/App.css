@@ -1,5 +1,6 @@
 body{
     background-color: rgb(48, 47, 47);
+    overflow-x: hidden;
 }
 .active{
     background-color: green;

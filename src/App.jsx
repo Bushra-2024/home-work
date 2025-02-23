@@ -23,27 +23,28 @@ function App() {
   const [editAge, setEditAge] = useState("");
   const [idx, setIdx] = useState("");
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("All"); 
+  const [statusFilter, setStatusFilter] = useState("All");
   const Api = "https://678941142c874e66b7d82c21.mockapi.io/users";
   const GetData = async () => {
     try {
       let api =
         statusFilter && statusFilter !== "All"
-          ? `${Api}?status=${statusFilter === "Active"}`
+          ? `${Api}?status=${statusFilter === "Active" ? "true" : "false"}`
           : Api;
+
       let { data } = await axios.get(api);
       let filtered = data.filter((user) =>
         JSON.stringify(user).toLowerCase().includes(search.toLowerCase())
       );
-        setData(filtered);
+      setData(filtered);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-  
+
   useEffect(() => {
     GetData();
-  }, [search, statusFilter]); 
+  }, [search, statusFilter]);
   // Add
   const AddData = async () => {
     let newUser = { name, gender, age };
@@ -67,13 +68,13 @@ function App() {
       console.error(error);
     }
   };
-  // Edit 
+  // Edit
   const EditData = async () => {
     let updatedUser = { name: editName, gender: editGender, age: editAge };
     try {
       await axios.put(`${Api}/${idx}`, updatedUser);
       GetData();
-      setEdit(false); 
+      setEdit(false);
     } catch (error) {
       console.error(error);
     }
@@ -87,7 +88,7 @@ function App() {
   };
 
   return (
-    <div style={{ maxWidth: "480px", margin: "20px auto", padding: "30px" }}>
+    <div style={{ maxWidth: "480px", margin: "20px auto", padding: "0px" }}>
       <TextField
         sx={{
           backgroundColor: "white",
@@ -125,9 +126,10 @@ function App() {
           }}
         >
           <option value="All">All</option>
-          <option value="true">Active</option> 
-          <option value="false">Inactive</option>
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
         </select>
+
         <Button
           variant="contained"
           sx={{
@@ -139,7 +141,8 @@ function App() {
             borderRadius: "5px",
             marginBottom: "10px",
           }}
-          onClick={() => setOpenModal(true)}>
+          onClick={() => setOpenModal(true)}
+        >
           ADD
         </Button>
       </div>
@@ -189,7 +192,7 @@ function App() {
                 padding: "8px",
               }}
             >
-              <strong>Age</strong>
+              <strong>Status</strong>
             </TableCell>
             <TableCell
               sx={{
@@ -225,7 +228,7 @@ function App() {
                   </TableCell>
                   <TableCell sx={{ color: "white", border: "1px solid gray" }}>
                     <button className={e.status ? "active" : "inactive"}>
-                      {e.status ? "active" : "inactive"}
+                      {e.status ? "Active" : "Inactive"}
                     </button>
                   </TableCell>
                   <TableCell sx={{ color: "white", border: "1px solid gray" }}>
@@ -243,7 +246,7 @@ function App() {
                           height: "25px",
                           borderRadius: "5px",
                         }}
-                        onClick={() => openEditModal(e)} 
+                        onClick={() => openEditModal(e)}
                       >
                         Edit
                       </Button>
@@ -374,13 +377,6 @@ function App() {
               variant="outlined"
               value={editGender}
               onChange={(e) => setEditGender(e.target.value)}
-              sx={{ width: "100%", marginBottom: "10px" }}
-            />
-            <TextField
-              label="Age"
-              variant="outlined"
-              value={editAge}
-              onChange={(e) => setEditAge(e.target.value)}
               sx={{ width: "100%", marginBottom: "10px" }}
             />
             <div
