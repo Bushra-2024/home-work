@@ -1,0 +1,19 @@
+body{
+    background-color: rgb(48, 47, 47);
+}
+.active{
+    background-color: green;
+    color: white;
+    border: none;
+}
+.inactive{
+    background-color: red;
+    color: white;
+    border: none;
+}
+
+@media(max-width:480px) {
+    .btns{
+        flex-direction: column;
+    }
+}
