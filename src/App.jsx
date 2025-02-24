@@ -7,6 +7,7 @@ import {
   TableCell,
   TextField,
   Button,
+  Checkbox,
 } from "@mui/material";
 import axios from "axios";
 import "./App.css";
@@ -15,12 +16,12 @@ function App() {
   const [data, setData] = useState([]);
   const [name, setName] = useState("");
   const [gender, setGender] = useState("");
-  const [age, setAge] = useState("");
+  const [status, setStatus] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [editopen, setEdit] = useState(false);
   const [editName, setEditName] = useState("");
   const [editGender, setEditGender] = useState("");
-  const [editAge, setEditAge] = useState("");
+  const [editStatus, setEditStatus] = useState("");
   const [idx, setIdx] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -41,18 +42,16 @@ function App() {
       console.error("Error fetching data:", error);
     }
   };
-
   useEffect(() => {
     GetData();
   }, [search, statusFilter]);
   // Add
   const AddData = async () => {
-    let newUser = { name, gender, age };
+    let newUser = { name, gender };
     try {
       await axios.post(Api, newUser);
       setName("");
       setGender("");
-      setAge("");
       setOpenModal(false);
       GetData();
     } catch (error) {
@@ -70,13 +69,17 @@ function App() {
   };
   // Edit
   const EditData = async () => {
-    let updatedUser = { name: editName, gender: editGender, age: editAge };
+    let updatedUser = {
+      name: editName,
+      gender: editGender,
+      status: editStatus === "Active" ? true : false,
+    };
     try {
       await axios.put(`${Api}/${idx}`, updatedUser);
       GetData();
-      setEdit(false);
+      setEdit(false); 
     } catch (error) {
-      console.error(error);
+      console.error("Error updating user:", error);
     }
   };
   const openEditModal = (user) => {
@@ -84,9 +87,13 @@ function App() {
     setIdx(user.id);
     setEditName(user.name);
     setEditGender(user.gender);
-    setEditAge(user.age);
+    setEditStatus(user.status ? "Active" : "Inactive");
   };
-
+  const ischecked = async (user) => {
+    let updatedUser = { ...user, status: !user.status };
+    await axios.put(`${Api}/${user.id}`, updatedUser); 
+    GetData(); 
+  };
   return (
     <div style={{ maxWidth: "480px", margin: "20px auto", padding: "0px" }}>
       <TextField
@@ -264,6 +271,11 @@ function App() {
                       >
                         Delete
                       </Button>
+                      <input
+                        type="checkbox"
+                        checked={e.status}
+                        onChange={() => ischecked(e)}
+                      />
                     </div>
                   </TableCell>
                 </TableRow>
@@ -273,99 +285,117 @@ function App() {
           )}
         </TableBody>
       </Table>
-{openModal && (
-  <div className="add">
-    <div style={{ backgroundColor: "white", padding: "20px", borderRadius: "5px" }}>
-      <h2>Add New User</h2>
-      <TextField
-        label="Name"
-        variant="outlined"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        sx={{ width: "100%", marginBottom: "10px" }}
-      />
-      <TextField
-        label="Gender"
-        variant="outlined"
-        value={gender}
-        onChange={(e) => setGender(e.target.value)}
-        sx={{ width: "100%", marginBottom: "10px" }}
-      />
-      <TextField
-        label="Age"
-        variant="outlined"
-        value={age}
-        onChange={(e) => setAge(e.target.value)}
-        sx={{ width: "100%", marginBottom: "10px" }}
-      />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "20px",
-        }}
-      >
-        <Button
-          onClick={AddData}
-          sx={{
-            backgroundColor: "green",
-            color: "white",
-            fontSize: "13px",
-            width: "100px",
-            height: "40px",
-            borderRadius: "5px",
-          }}
-        >
-          Add
-        </Button>
-      </div>
-    </div>
-  </div>
-)}
+      {openModal && (
+        <div className="add">
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "5px",
+            }}
+          >
+            <h2>Add New User</h2>
+            <TextField
+              label="Name"
+              variant="outlined"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              sx={{ width: "100%", marginBottom: "10px" }}
+            />
+            <TextField
+              label="Gender"
+              variant="outlined"
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+              sx={{ width: "100%", marginBottom: "10px" }}
+            />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "20px",
+              }}
+            >
+              <Button
+                onClick={AddData}
+                sx={{
+                  backgroundColor: "green",
+                  color: "white",
+                  fontSize: "13px",
+                  width: "100px",
+                  height: "40px",
+                  borderRadius: "5px",
+                }}
+              >
+                Add
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
-{editopen && (
-  <div className="edit">
-    <div style={{ backgroundColor: "white", padding: "20px", borderRadius: "5px" }}>
-      <h2>Edit User</h2>
-      <TextField
-        label="Name"
-        variant="outlined"
-        value={editName}
-        onChange={(e) => setEditName(e.target.value)}
-        sx={{ width: "100%", marginBottom: "10px" }}
-      />
-      <TextField
-        label="Gender"
-        variant="outlined"
-        value={editGender}
-        onChange={(e) => setEditGender(e.target.value)}
-        sx={{ width: "100%", marginBottom: "10px" }}
-      />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "20px",
-        }}
-      >
-        <Button
-          onClick={EditData}
-          sx={{
-            backgroundColor: "green",
-            color: "white",
-            fontSize: "13px",
-            width: "100px",
-            height: "40px",
-            borderRadius: "5px",
-          }}
-        >
-          Save
-        </Button>
-      </div>
-    </div>
-  </div>
-)}
+      {editopen && (
+        <div className="edit">
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "5px",
+            }}
+          >
+            <h2>Edit User</h2>
+            <TextField
+              label="Name"
+              variant="outlined"
+              value={editName}
+              onChange={(e) => setEditName(e.target.value)}
+              sx={{ width: "100%", marginBottom: "10px" }}
+            />
+            <TextField
+              label="Gender"
+              variant="outlined"
+              value={editGender}
+              onChange={(e) => setEditGender(e.target.value)}
+              sx={{ width: "100%", marginBottom: "10px" }}
+            />
+            <select
+              value={editStatus}
+              onChange={(e) => setEditStatus(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "10px",
+                borderRadius: "5px",
+                marginBottom: "10px",
+              }}
+            >
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
 
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "20px",
+              }}
+            >
+              <Button
+                onClick={EditData}
+                sx={{
+                  backgroundColor: "green",
+                  color: "white",
+                  fontSize: "13px",
+                  width: "100px",
+                  height: "40px",
+                  borderRadius: "5px",
+                }}
+              >
+                Save
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
